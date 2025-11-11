@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Home</title>
+  <th:block th:insert="~{include/bs5}"></th:block>
+  <script th:inline="javascript">
+    'use strict';
+
+    let message = [[${message}]];
+    if(message != null) alert(message);
+
+    function userCheck(flag) {
+      $("#demo").show();
+      $("#searchFlag").val(flag);
+    }
+
+    function login() {
+      let mid = $("#mid").val().replace(" ","");
+      let pwd = $("#pwd").val().replace(" ","");
+      if(mid == "") {
+        alert("아이디를 입력해주세요.");
+        return false;
+      }
+      if(pwd == "") {
+        alert("비밀번호를 입력해주세요.");
+        return false;
+      }
+
+      myForm.submit();
+    }
+  </script>
+</head>
+<body>
+<div class="container text-center">
+  <p><br/></p>
+  <h2>어서오세요.</h2>
+  <img src="/images/1.jpg" width="400px" />
+  <p></p>
+  <th:block th:if="${#strings.isEmpty(session.sMid)}">
+    <div>
+      <form name="myForm" method="post">
+        <table class="table table-bordered">
+          <tr>
+            <th class="table-secondary">아이디</th>
+            <td><input type="text" id="mid" name="mid" th:value="${session.sMid}" class="form-control" /></td>
+            <td rowspan="2" class="align-middle">
+              <input type="button" value="로그인" th:onclick="login()" class="btn btn-success mb-1" /><br/>
+              <input type="checkbox" value="idSave" />아이디저장
+            </td>
+          </tr>
+          <tr>
+            <th class="table-secondary">비밀번호</th>
+            <td><input type="password" id="pwd" name="pwd" class="form-control" /></td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </th:block>
+  <div class="row">
+    <div class="col">
+      <th:block th:if="${#strings.isEmpty(session.sMid)}">
+        <a th:href="@{user/userInput}" class="btn btn-success me-2">회원가입</a>
+      </th:block>
+      <th:block th:unless="${#strings.isEmpty(session.sMid)}">
+        <a th:href="@{user/userLogout}" class="btn btn-warning me-2">로그아웃</a>
+      </th:block>
+      <a th:href="|javascript:userCheck('s')|" class="btn btn-primary me-2">회원개별조회</a>
+      <a th:href="@{user/userList}" class="btn btn-info me-2">회원목록</a>
+      <a th:href="|javascript:userCheck('u')|" class="btn btn-warning">회원정보수정</a>
+    </div>
+  </div>
+  <p></p>
+  <div id="demo" class="container" style="display:none;">
+    <form method="post" action="/user/userIdCheck" class="text-center">
+      <div class="input-group text-center">
+        <span class="input-group-text">아이디</span>
+        <input type="text" name="mid" placeholder="검색할 아이디를 입력하세요" class="form-control" required />
+        <input type="submit" value="검색" class="btn btn-primary btn-sm" />
+      </div>
+      <input type="hidden"id="searchFlag" name="searchFlag"  />
+    </form>
+  </div>
+</div>
+</body>
+</html>

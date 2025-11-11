@@ -1,0 +1,54 @@
+server:
+  port: 9099
+
+spring:
+  application:
+    name: demo9
+
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
+
+  thymeleaf:
+    cache: false
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/springgroup # 예전에는 한글처리, 한국시간처리 등도 써줬었다.
+    username: root
+    password: 1234
+
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+
+  # spring security user/password setting
+  security:
+    user:
+      name: admin@green.com
+      password: 1234
+
+  # file upload maxsize settion
+  servlet:
+    multipart:
+      enabled: true
+      maxFileSize: 10MB
+      maxRequestSize: 30MB
+
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: trace

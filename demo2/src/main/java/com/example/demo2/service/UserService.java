@@ -1,0 +1,31 @@
+package com.example.demo2.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.example.demo2.dao.UserDAO;
+import com.example.demo2.dto.UserDTO;
+
+@Service
+public class UserService {
+	private final UserDAO userDAO;
+	public UserService(UserDAO userDAO) {
+		this.userDAO = userDAO;
+	}
+	public List<UserDTO> getUserList() {
+		return userDAO.getUserList();
+	}
+	public int setUserInput(UserDTO dto) {
+		return userDAO.setUserInput(dto);
+	}
+	public UserDTO getUserMid(String mid) {
+		return userDAO.getUserMid(mid);
+	}
+	public int setUserDelete(int idx) {
+		return userDAO.setUserDelete(idx);
+	}
+	public int setUserUpdate(UserDTO dto) {
+		return userDAO.setUserUpdate(dto);
+	}
+}

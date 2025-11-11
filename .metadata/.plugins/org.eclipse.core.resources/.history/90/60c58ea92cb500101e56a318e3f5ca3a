@@ -1,0 +1,18 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h2>exam1íì¼ìëë¤.</h2>
+	<p>ë©ì¸ì§1: ${msg}</p>
+	<p><br/></p>
+	<img src="../images/07.jpg" width="300px" />
+	<p><br/></p>
+	<input type="button" value="index.jspì´ë" onclick="location.href='/'" />
+	<input type="button" value="index.htmlì´ë" onclick="location.href='../index.html'" />
+	<input type="button" value="exam2.htmlì´ë" onclick="location.href='exam2.html'" />
+</body>
+</html>

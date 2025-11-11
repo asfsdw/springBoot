@@ -1,0 +1,121 @@
+package com.example.demo2.controller;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Controller
+@RequestMapping("/upload")
+public class UploadController {
+	@GetMapping("/upload")
+	public String uploadGet() {
+		return "upload/upload";
+	}
+	// 싱글파일 업로드.
+	@PostMapping("/upload")
+	public String uploadPost(RedirectAttributes rttr, MultipartFile sFile) {
+		String oFileName = sFile.getOriginalFilename();
+		if(oFileName.equals("")) {
+			rttr.addFlashAttribute("message", "업로드할 파일을 선택해주세요.");
+			return "redirect:/upload/upload";
+		}
+		
+		String sFileName = oFileName.substring(0, oFileName.lastIndexOf("."))+"_"+UUID.randomUUID().toString().substring(0, 3)+oFileName.substring(oFileName.lastIndexOf("."));
+		log.info("원본파일이름: "+oFileName);
+		log.info("저장파일이름: "+sFileName);
+		
+		// 서버에 파일 업로드.
+		int res = 0;
+		try {
+			writeFile(sFile, sFileName);
+			
+			res = 1;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if(res != 0) rttr.addFlashAttribute("message", "파일이 업로드되었습니다.");
+		else rttr.addFlashAttribute("message", "잠시 후, 다시 시도해주세요.");
+		return "redirect:/upload/upload";
+	}
+	// 멀티파일 업로드.
+	@PostMapping("/multiUpload")
+	public String multiUploadPost(RedirectAttributes rttr, MultipartHttpServletRequest workFile) {
+		int res = 0;
+		try {
+			List<MultipartFile> files = workFile.getFiles("mFile");
+			for(MultipartFile file : files) {
+				String oFileName = file.getOriginalFilename();
+				String sFileName = oFileName.substring(0, oFileName.lastIndexOf("."))+"_"+UUID.randomUUID().toString().substring(0, 3)+oFileName.substring(oFileName.lastIndexOf("."));
+				
+				writeFile(file, sFileName);
+			}
+			res = 1;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if(res != 0) rttr.addFlashAttribute("message", "파일이 업로드되었습니다.");
+		else rttr.addFlashAttribute("message", "잠시 후, 다시 시도해주세요.");
+		return "redirect:/upload/upload";
+	}
+	
+	// 파일 업로드.
+	private void writeFile(MultipartFile sFile, String sFileName) throws IOException {
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+    String realPath = request.getSession().getServletContext().getRealPath("/upload/");
+    FileOutputStream fos = new FileOutputStream(realPath + sFileName);
+    
+    if(sFile.getBytes().length != -1) {
+    	fos.write(sFile.getBytes());
+    }
+    fos.flush();
+    fos.close();
+	}
+	
+	// 업로드된 파일 목록.
+	@GetMapping("/uploadList")
+	public String uploadListGet(HttpServletRequest request, Model model) {
+		String realPath = request.getSession().getServletContext().getRealPath("/upload/");
+		String[] files = new File(realPath).list();
+		
+		model.addAttribute("files", files);
+		return "upload/uploadList";
+	}
+	
+	// 파일 삭제.
+	@ResponseBody
+	@PostMapping("/fileSelectDelete")
+	public String fileSelectDeleteGet(HttpServletRequest request, String delItems) {
+		String res = "0";
+		String realPath = request.getServletContext().getRealPath("/upload/");
+		delItems = delItems.substring(0, delItems.length()-1);
+		
+		String[] fileNames = delItems.split("/");
+		
+		for(String fileName : fileNames) {
+			String realPathFile = realPath + fileName;
+			new File(realPathFile).delete();
+			res = "1";
+		}
+		return res;
+	}
+}

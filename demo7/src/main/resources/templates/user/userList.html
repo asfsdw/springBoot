@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>User List</title>
+  <th:block th:insert="~{include/bs5}"></th:block>
+  <script th:inline="javascript">
+    'use strict';
+
+    let message = [[${message}]];
+    if(message != null) alert(message);
+
+    function orderByIdDesc() {
+      location.href="/user/userList?flag=desc";
+    }
+    function userDelete(id) {
+      let ans = confirm("회원을 삭제하시겠습니까?");
+      if(ans) {
+        $.ajax({
+          url : "/user/userDelete",
+          type: "post",
+          data: {"id" : id},
+          success : (res) => {
+            if(res == 1) {
+              alert("회원이 삭제되었습니다.");
+              location.reload();
+            }
+            else alert("잠시 후, 다시 시도해주세요.");
+          },
+          error : () => alert("전송오류")
+        });
+      }
+    }
+  </script>
+</head>
+<body>
+<div class="container text-center">
+  <p><br/></p>
+  <h2>회원목록</h2>
+  <p></p>
+  <div class="row">
+    <div class="col text-end">
+      <input type="button" value="번호내림차순" onclick="orderByIdDesc()" class="btn btn-success btn-sm" />
+    </div>
+  </div>
+  <p></p>
+  <table class="table table-hover">
+    <tr class="table-secondary">
+      <th>번호</th>
+      <th>아이디</th>
+      <th>이름</th>
+      <th>나이</th>
+      <th>성별</th>
+      <th>주소</th>
+      <th>비고</th>
+    </tr>
+    <th:block th:each="dto : ${userList}">
+      <tr>
+        <td>[[${dto.id}]]</td>
+        <td>[[${dto.mid}]]</td>
+        <td>[[${dto.name}]]</td>
+        <td>[[${dto.age}]]</td>
+        <td>[[${dto.gender}]]</td>
+        <td>[[${dto.address}]]</td>
+        <td>
+          <input type="button" value="삭제" th:onclick="userDelete([[${dto.id}]])" class="btn btn-danger btn-sm" />
+        </td>
+      </tr>
+    </th:block>
+  </table>
+  <a href="/" class="btn btn-warning">돌아가기</a>
+</div>
+</body>
+</html>

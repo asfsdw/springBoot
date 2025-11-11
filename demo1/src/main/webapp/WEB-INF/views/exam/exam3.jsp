@@ -1,0 +1,19 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>exam2</title>
+</head>
+<body>
+	<h2>exam2파일입니다.</h2>
+	<p>메시지: ${msg}</p>
+	<p><br/></p>
+	<img src="../../images/19.jpg" width="300px" />
+	<p><br/></p>
+	<input type="button" value="index.jsp이동" onclick="location.href='/'" />
+	<input type="button" value="index.html이동" onclick="location.href='../index.html'" />
+	<input type="button" value="exam1.jsp이동" onclick="location.href='/exam/exam1'" />
+	<input type="button" value="exam1.jsp이동" onclick="location.href='/exam/exam2'" />
+</body>
+</html>

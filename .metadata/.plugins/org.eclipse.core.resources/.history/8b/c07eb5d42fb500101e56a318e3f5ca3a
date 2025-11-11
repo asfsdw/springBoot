@@ -1,0 +1,33 @@
+package com.example.demo1.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+
+@Controller
+public class HomeController {
+	@GetMapping("/")
+	public String indexGet(Model model) {
+		model.addAttribute("msg", "안녕하세요.");
+		return "index";
+	}
+	
+	@GetMapping("/exam/exam1")
+	public String exam1Get(Model model, String msg) {
+		model.addAttribute("msg", msg);
+		return "exam/exam1";
+	}
+	@GetMapping("/exam/exam2")
+	public String exam2Get(Model model,
+			@RequestParam(name = "msg", defaultValue = "", required = false)String msg) {
+		model.addAttribute("msg", msg);
+		return "exam/exam2";
+	}
+	@GetMapping("/exam/exam3/{msg}")
+	public String exam3Get(Model model, @PathVariable String msg) {
+		model.addAttribute("msg", msg);
+		return "exam/exam3";
+	}
+}

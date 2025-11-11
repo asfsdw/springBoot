@@ -1,0 +1,24 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<% pageContext.setAttribute("ctp", request.getContextPath()); %>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>index</title>
+</head>
+<body>
+	<p><br/></p>
+	<div class="container">
+		<h2>index.jsp파일입니다.</h2>
+		<p>${msg}</p>
+		<p><br/></p>
+		<img src="/images/cat-9813484_1280.jpg" width="300px" />
+		<p><br/></p>
+		<input type="button" value="index.html이동" onclick="location.href='/index.html'" />
+		<input type="button" value="exam1.jsp이동" onclick="location.href='/exam/exam1?msg=exam1입니다.'" />
+		<input type="button" value="exam2.jsp이동" onclick="location.href='/exam/exam2?msg=exam2입니다.'" />
+		<input type="button" value="exam3.jsp이동" onclick="location.href='/exam/exam3?msg=exam2입니다.'" />
+	</div>
+</body>
+</html>

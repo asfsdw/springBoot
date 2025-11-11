@@ -1,0 +1,16 @@
+# server port : 9094
+server:
+  port: 9094
+
+spring:
+  application:
+    name: demo4
+
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
+
+  thymeleaf:
+    cache: false

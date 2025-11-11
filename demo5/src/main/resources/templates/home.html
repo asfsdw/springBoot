@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+                xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+                layout:decorate="~{layouts/basicLayout}">
+  <div layout:fragment="content">
+    <h2>어서오세요.</h2>
+    <p></p>
+    <img src="/images/cat-9769723_1280.jpg" width="300px" />
+    <hr/>
+    <div>
+      <a th:href="@{/guest/guestList?mid=admin}" class="btn btn-success me-1">방명록</a>
+      <a th:href="@{/board/boardList}" class="btn btn-primary me-1">게시판</a>
+      <a th:href="@{/pds/pdsList}" class="btn btn-info">자료실</a>
+    </div>
+  </div>
+</html>

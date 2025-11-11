@@ -1,0 +1,8 @@
+spring.application.name=demo1
+
+# server port setting(서버 포트 변경).
+server.port=9091
+
+# jsp setting(jsp 경로와 확장자).
+spring.mvc.view.prefix=/WEB-INF/views/
+spring.mvc.view.suffix=.jsp

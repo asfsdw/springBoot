@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>ex3</title>
+  <th:block th:insert="~{include/bs5}"></th:block>
+</head>
+<body>
+<p><br/></p>
+<div class="container">
+  <h2>ex3Res.html입니다.</h2>
+  <hr/>
+  <form method="post">
+    <table class="table table-hover">
+      <tr>
+        <th>성명</th>
+        <td><input type="text" name="name" th:value="${dto.name}" class="form-control" /></td>
+      </tr>
+      <tr>
+        <th>비밀번호</th>
+        <td><input type="text" name="pwd" th:value="${dto.pwd}" class="form-control" /></td>
+      </tr>
+      <tr>
+        <th>나이</th>
+        <td><input type="number" name="age" th:value="${dto.age}" class="form-control" /></td>
+      </tr>
+      <tr>
+        <th>성별</th>
+        <td>
+          <input type="radio" name="gender" value="남자" checked />남자 &nbsp;
+          <input type="radio" name="gender" value="여자" />여자
+        </td>
+      </tr>
+      <tr>
+        <th>직업</th>
+        <td>
+          <select name="job">
+            <option>학생</option>
+            <option>회사원</option>
+            <option>공무원</option>
+            <option>군인</option>
+            <option>기타</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <th>다녀온 산</th>
+        <td>
+          <input type="checkbox" name="mountain" value="백두산" checked />&nbsp;백두산&nbsp;
+          <input type="checkbox" name="mountain" value="한라산" />&nbsp;한라산&nbsp;
+          <input type="checkbox" name="mountain" value="태백산" />&nbsp;태백산&nbsp;
+          <input type="checkbox" name="mountain" value="소백산" />&nbsp;소백산&nbsp;
+          <input type="checkbox" name="mountain" value="우암산" />&nbsp;우암산
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" class="text-center">
+          <input type="button" value="돌아가기1" onclick="location.href='/exam/ex3'" class="btn btn-success" />
+          <input type="button" value="돌아가기2" th:onclick="|location.href='@{/exam/ex3}'|" class="btn btn-info" />
+        </td>
+      </tr>
+    </table>
+  </form>
+  <hr/>
+  <a th:href="@{/}" class="btn btn-warning">홈으로</a>
+</div>
+</body>
+</html>

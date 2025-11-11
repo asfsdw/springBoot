@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/basicLayout}">
+  <script layout:fragment="script" th:inline="javascript">
+    'use strict'
+
+    if([[${message}]] != null) alert([[${message}]]);
+  </script>
+  <div layout:fragment="content">
+    <h2>[[${session.sName}]]님 전용 방입니다.</h2>
+    <div th:text="|회원 등급 : ${session.sStrLevel}|"></div>
+    <img src="/images/1.jpg" width="400px" />
+  </div>
+</html>

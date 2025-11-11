@@ -1,0 +1,14 @@
+show tables;
+
+create table user (
+  idx  int  not null auto_increment,
+  mid  varchar(20) not null,
+  name varchar(20) not null,
+  age  int not null default 20,
+  gender char(2) default '여자',
+  address varchar(20),  
+  primary key idx
+);
+drop table user3;
+
+select * from user3;

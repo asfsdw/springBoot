@@ -1,0 +1,43 @@
+server:
+  port: 9096
+
+spring:
+  application:
+    name: demo6
+
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
+
+  thymeleaf:
+    cache: false
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/springgroup
+    username: root
+    password: 1234
+
+  # JPA setting
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: create  # create(항상 새로 만든다), update(없으면 만들고 있으면 업데이트한다), none(생성만한다), create-drop(지우고 새로 생성), validate(배포할 때 체크)
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+
+# Log information setting
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: trace

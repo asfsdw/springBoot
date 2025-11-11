@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>User Input</title>
+  <th:block th:insert="~{include/bs5}"></th:block>
+  <script th:inline="javascript">
+    'use strict';
+
+    let message = [[${message}]];
+    if(message != null) alert(message);
+  </script>
+</head>
+<body>
+<div class="container text-center">
+  <p><br/></p>
+  <form method="post" action="/user/userUpdate" class="was-validated">
+    <table class="table table-bordered">
+      <tr>
+        <td colspan="2"><span style="font-size:25px">회 원 정 보 수 정</span></td>
+      </tr>
+      <tr>
+        <th>아이디</th>
+        <td><input type="text" name="mid" th:value="${dto.mid}" readonly required class="form-control" /></td>
+      </tr>
+      <tr>
+        <th>성명</th>
+        <td><input type="text" name="name" placeholder="이름을 입력해주세요." th:value="${dto.name}" autofocus required class="form-control" /></td>
+      </tr>
+      <tr>
+        <th>나이</th>
+        <td><input type="number" name="age" min="0" max="99" th:value="${dto.age}" required class="form-control" /></td>
+      </tr>
+      <tr>
+        <th>성별</th>
+        <td class="text-start">
+          <input type="radio" name="gender" value="남자" th:checked="${dto.gender == '남자'}" /> 남자 &nbsp;
+          <input type="radio" name="gender" value="여자" th:checked="${dto.gender == '여자'}" /> 여자
+        </td>
+      </tr>
+      <tr>
+        <th>주소</th>
+        <td><input type="text" name="address" placeholder="주소를 입력해주세요." th:value="${dto.address}" class="form-control" /></td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <input type="submit" value="회원수정" class="btn btn-success" />
+          <input type="button" value="돌아가기" th:onclick="|location.href='@{/}'|" class="btn btn-warning" />
+        </td>
+      </tr>
+    </table>
+    <input type="hidden" name="id" th:value="${dto.id}" />
+    <input type="hidden" name="pwd" th:value="${dto.pwd}" />
+  </form>
+</div>
+</body>
+</html>

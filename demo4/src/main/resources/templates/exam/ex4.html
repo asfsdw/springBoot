@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>ex4</title>
+  <th:block th:insert="~{include/bs5}"></th:block>
+  <script>
+    'use strict';
+
+    function modalCheck(name, age) {
+      $(".modal-body .name").html("성명: "+name);
+      $(".modal-body .age").html("나이: "+age);
+    }
+  </script>
+</head>
+<body>
+  <p><br/></p>
+  <div class="container">
+    <h2>ex4.html입니다.</h2>
+    <hr/>
+    <div>메시지1: [[${message1}]]</div>
+    <div>메시지2: [[${message2}]]</div>
+    <div>메시지2: <span th:utext="${message2}"></span></div>
+    <div>메시지2: [(${message2})]</div>
+    <hr/>
+    <h4>지역변수선언(th:with)</h4>
+    <div th:with="msg='안녕. Spring boot.'">
+      지역변수명 msg: [[${msg}]]
+      <div>
+        지역변수명 msg: [[${msg}]]
+      </div>
+    </div>
+    <hr/>
+    <div>
+      지역변수명 msg: [[${msg}]]
+    </div>
+    <hr/>
+    <div>
+      <h4>문자리터럴</h4>
+      <span th:text="'안녕. ' + '반갑다.'"></span><br/>
+      <span th:text="'안녕. ' + ${message1}"></span><br/>
+      <span th:utext="'<u>안녕</u>. ' + ${message2}"></span><br/>
+      <span th:text="|안녕. ${message1}|"></span><br/>
+      <span th:utext="|<u>안녕</u>. ${message2}|"></span><br/>
+    </div>
+    <hr/>
+    <div>
+      <h4>관계연산자</h4>
+      <div> >gt, < lt, >=ge, <=le, !not, ==eq, !=ne</div>
+      <div>not은 논리(true, false)에만 적용되기 때문에 지금은 쓰지 않는다.</div>
+      ${10 > 20}: <span th:text="${10 > 20}"></span><br/>
+      ${10 gt 20}: <span th:text="${10 gt 20}"></span><br/>
+      ${10 >= 20}: <span th:text="${10 >= 20}"></span><br/>
+      ${10 ge 20}: <span th:text="${10 ge 20}"></span><br/>
+      ${10 < 20}: <span th:text="${10 < 20}"></span><br/>
+      ${10 lt 20}: <span th:text="${10 lt 20}"></span><br/>
+      ${10 < = 20}: <span th:text="${10 <= 20}"></span><br/>
+      ${10 le 20}: <span th:text="${10 le 20}"></span><br/>
+      ${10 != 20}: <span th:text="${10 > 20}"></span><br/>
+      ${10 == 20}: <span th:text="${10 == 20}"></span><br/>
+      ${10 eq 20}: <span th:text="${10 eq 20}"></span><br/>
+      ${10 != 20}: <span th:text="${10 != 20}"></span><br/>
+      ${10 ne 20}: <span th:text="${10 ne 20}"></span><br/>
+    </div>
+    <hr/>
+    <h4>ExamList객체 내용 출력</h4>
+    <div>
+      <span th:text="${examList[0].name}"></span> : <span th:text="${examList[0].age}"></span><br/>
+      <span th:text="${examList[1].name}"></span> : <span th:text="${examList[1].age}"></span><br/>
+      <span th:text="${examList[2].name}"></span> : <span th:text="${examList[2].age}"></span><br/>
+      <span th:text="${examList[3].name}"></span> : <span th:text="${examList[3].age}"></span><br/>
+      <span th:text="${examList[4].name}"></span> : <span th:text="${examList[4].age}"></span><br/>
+      <span th:text="${examList[5].name}"></span> : <span th:text="${examList[5].age}"></span><br/>
+      <span th:text="${examList[6].name}"></span> : <span th:text="${examList[6].age}"></span><br/>
+      <span th:text="${examList[7].name}"></span> : <span th:text="${examList[7].age}"></span><br/>
+      <span th:text="${examList[8].name}"></span> : <span th:text="${examList[8].age}"></span><br/>
+      <span th:text="${examList[9].name}"></span> : <span th:text="${examList[9].age}"></span>
+    </div>
+    <hr/>
+    <h4>ExamMap객체 내용 출력</h4>
+    <div>
+      <span th:text="${examMap[user1].name}"></span> : <span th:text="${examMap[user1].age}"></span><br/>
+      <span th:text="${examMap[user2].name}"></span> : <span th:text="${examMap[user2].age}"></span><br/>
+      <span th:text="${examMap[user3].name}"></span> : <span th:text="${examMap[user3].age}"></span><br/>
+      <span th:text="${examMap[user4].name}"></span> : <span th:text="${examMap[user4].age}"></span><br/>
+      <span th:text="${examMap[user5].name}"></span> : <span th:text="${examMap[user5].age}"></span><br/>
+      <span th:text="${examMap[user6].name}"></span> : <span th:text="${examMap[user6].age}"></span><br/>
+    </div>
+    <hr/>
+    <div th:with="su1=100, su2=200">
+      <h4>조건문(if)</h4>
+      <div>
+        큰 수:
+        <th:block th:if="${su1 > su2}">su1([[${su1}]])이 su2([[${su2}]])보다 크다.<br/></th:block>
+        <th:block th:if="${su1 < su2}">su2([[${su2}]])가 su1([[${su1}]])보다 크다.<br/></th:block>
+        <th:block th:if="${su1 == su2}">su1([[${su1}]])과 su2([[${su2}]])는 같다.<br/></th:block>
+        <th:block th:unless="${su1 > su2}">su2([[${su2}]])가 su1([[${su1}]])보다 크거나 같다.<br/></th:block>
+      </div>
+      <hr/>
+      <h4>다중 조건문(switch ~ case)</h4>
+      <div>
+        <th:block th:switch="${su1%101}">
+          <div th:case="0" th:text="실패"></div>
+          <div th:case="1" th:text="성공"></div>
+          <div th:case="2" th:text="재도전"></div>
+          <div th:case="*" th:text="'잘못된 결과입니다.'"></div>
+        </th:block>
+      </div>
+      <hr/>
+      <h4>반복문(each)</h4>
+      <th:block th:each="num : ${#numbers.sequence(5,10)}">
+        <span th:text="${num}"></span> /
+      </th:block>
+      <p></p>
+      <th:block th:each="examDTO : ${examList}">
+        <a href="#" th:onclick="modalCheck([[${examDTO.name}]], [[${examDTO.age}]])" data-bs-toggle="modal" data-bs-target="#myModal">[[${examDTO.name}]]</a> /
+        <span th:text="${examDTO.age}"></span><br/>
+      </th:block>
+      <p></p>
+      <h4>상태변수값(index, count, first, last, size, odd, even, current)</h4>
+      <div>전체 user</div>
+      <table class="table table-hover text-center">
+        <tr class="table-secondary">
+          <th>번호</th>
+          <th>성명</th>
+          <th>나이</th>
+          <th>데이터 총 수</th>
+        </tr>
+        <th:block th:each="examDTO, st : ${examList}">
+          <th:block th:if="${st.odd}">
+          <tr class="table-warning">
+            <td>[[${st.count}]]</td>
+            <td>[[${examDTO.name}]]</td>
+            <td>[[${examDTO.age}]]</td>
+            <td colspan="">[[${st.size}]]</td>
+          </tr>
+          </th:block>
+          <th:block th:unless="${st.odd}">
+            <tr>
+              <td>[[${st.count}]]</td>
+              <td>[[${examDTO.name}]]</td>
+              <td>[[${examDTO.age}]]</td>
+              <td colspan="">[[${st.size}]]</td>
+            </tr>
+          </th:block>
+        </th:block>
+      </table>
+      <hr/>
+      <h4>삼항연산자</h4>
+      <div>1.<span th:text="${su1%2==0}?'짝수':'홀수'"></span></div>
+      <div>2.<span th:text="${message1}?${message2}:'메시지가 없습니다.'"></span></div>
+      <p></p>
+      <h4>문자열 공백/null 비교(isEmpty)</h4>
+      <div>3.<th:block th:if="${#strings.isEmpty(examList[0].name)}">등록된 성명이 없습니다.</th:block></div>
+      <div>3.<th:block th:if="!${#strings.isEmpty(examList[0].name)}" th:text="${examList[0].name}"></th:block></div>
+      <p></p>
+      <h4>examList 전체 갯수:[[${#lists.size(examList)}]]건</h4>
+      <h4>examList 나이 합계:[[${#aggregates.sum(examList.![age])}]]세</h4>
+      <h4>examList 나이 평균:[[${#aggregates.avg(examList.![age])}]]세</h4>
+      <h4>날짜: [[${#calendars.format(#calendars.createNow(),'yyyy-MM-dd HH:mm:ss')}]]</h4>
+    </div>
+    <p><br/></p>
+    <div><a th:href="@{/}" class="btn btn-warning">홈으로</a></div>
+  </div>
+  <!-- The Modal -->
+  <div class="modal fade" id="myModal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Modal Heading</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="name"></div>
+          <div class="age"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

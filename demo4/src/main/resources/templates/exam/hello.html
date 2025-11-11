@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>hello</title>
+</head>
+<body>
+  <h2>이곳은 hello.html입니다.</h2>
+  <p><br/></p>
+  <input type="button" value="홈으로" onclick="location.th:href='@{/}'" />
+  <div>
+    <table>
+      <tr>
+        <th>아이디</th>
+        <td><span th:text="${mid}">아이디</span></td>
+      </tr>
+      <tr>
+        <th>비밀번호</th>
+        <td><span th:text="${pwd}">비밀번호</span></td>
+      </tr>
+    </table>
+  </div>
+  <p></p>
+  <a href="/">홈으로1</a>
+  <a th:href="@{/}">홈으로2</a>
+</body>
+</html>

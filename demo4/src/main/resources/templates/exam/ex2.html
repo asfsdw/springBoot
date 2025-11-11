@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>ex1</title>
+  <th:block th:insert="~{include/bs5}"></th:block>
+</head>
+<body>
+  <p><br/></p>
+  <div class="container">
+    <h2>ex1.html입니다.</h2>
+    <hr class="border" />
+    <div>아이디: <span th:text="${mid}"></span></div>
+    <hr class="border" />
+    <div>
+      <a th:href="@{/exam/ex1/안녕하세요.}" class="btn btn-success">값전송(PathVariable)</a>
+    </div>
+    <hr class="border" />
+    <div>
+      <a th:href="@{/}" class="btn btn-warning">홈으로</a>
+    </div>
+  </div>
+</body>
+</html>

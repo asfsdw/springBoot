@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h2>exam2파일입니다.</h2>
+	<p>메세지2: ${msg}</p>
+	<p><br/></p>
+	<input type="button" value="html이동" onclick="location.href='index.html'" />
+</body>
+</html>

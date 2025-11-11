@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>index</title>
+  <th:block th:insert="~{include/bs5}"></th:block>
+</head>
+<body>
+  <div class="container">
+    <p><br/></p>
+    <h2>인텔리제이 IDE를 이용한 홈페이지입니다.</h2>
+    <p><br/></p>
+    <div><img src="/images/cat-9769723_1280.jpg" width="300px" /></div>
+    <p></p>
+    <input type="button" value="hello로 이동" onclick="location.th:href='@{/exam/hello}'" class="btn btn-success" />
+    <a href="/exam/hello" class="btn btn-primary">hello로 이동1</a>
+    <a th:href="@{/exam/hello}" class="btn btn-info">hello로 이동2</a>
+    <a href="/exam/hello?mid=admin&pwd=1234" class="btn btn-primary">hello로 이동3</a>
+  <!--  <a th:href="@{/exam/hello?mid=hkd1234&pwd=4321}">hello로 이동4</a>-->
+    <a th:href="@{/exam/hello(mid=hkd1234,pwd=4321)}" class="btn btn-info">hello로 이동4</a><br/>
+    <p></p>
+    <div>
+      <a th:href="@{/exam/ex1/index}" class="btn btn-success">ex1로 이동</a>
+      <a th:href="@{/exam/ex3}" class="btn btn-primary">ex3로 이동</a>
+      <a th:href="@{/exam/ex4}" class="btn btn-info">ex4로 이동</a>
+    </div>
+  </div>
+  <p><br/></p>
+</body>
+</html>

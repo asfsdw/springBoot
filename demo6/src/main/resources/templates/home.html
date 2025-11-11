@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>HOME</title>
+  <th:block th:insert="~{include/bs5}"></th:block>
+</head>
+<body>
+  <p><br/></p>
+  <div class="container">
+    <h2>어서오세요.</h2>
+    <img src="/images/cat-9769723_1280.jpg" width="400px" />
+    <p></p>
+    <input type="button" value="회원등록" th:onclick="|location.href='@{/user/userInput}'|" class="btn btn-success" />
+    <input type="button" value="회원목록" th:onclick="|location.href='@{/user/userList}'|" class="btn btn-primary" />
+  </div>
+</body>
+</html>

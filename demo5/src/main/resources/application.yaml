@@ -1,0 +1,22 @@
+server:
+  port: 9095
+
+spring:
+  application:
+    name: demo5
+
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
+
+  thymeleaf:
+    cache: false
+
+  #DataSource
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/springgroup
+    username: root
+    password: 1234

@@ -1,0 +1,3 @@
+spring.application.name=demo1
+
+# 서버 포트 편경(server port change).

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>User Input</title>
+  <th:block th:insert="~{include/bs5}"></th:block>
+  <script>
+    'use strict';
+    let nameCheckSW = false;
+
+    function nameCheck() {
+      let name = $("#name").val();
+      if(name == "") {
+        alert("아이디를 입력해주세요.");
+        $("#name").focus();
+        return false;
+      }
+
+      $.ajax({
+        url : "/user/nameCheck",
+        type: "post",
+        data: {"name" : name},
+        success : (res) => {
+          if(res == 1) {
+            alert("사용가능한 아이디입니다.");
+            $("#name").attr("readonly", true);
+            $("#nameCheckBtn").attr("disabled", true);
+            nameCheckSW = true;
+          }
+          else {
+            alert("이미 사용중인 아이디입니다.");
+            nameCheckSW = false;
+            $("#name").focus();
+            return false;
+          }
+        },
+        error : () => alert("전송오류")
+      });
+    }
+
+    function fCheck() {
+      if(nameCheckSW == false) {
+        alert("아이디 중복확인을 해주세요.");
+        return false;
+      }
+
+      myForm.submit();
+    }
+  </script>
+</head>
+<body>
+  <div class="container text-center">
+    <p><br/></p>
+    <h2>회원등록</h2>
+    <p></p>
+    <form name="myForm" method="post">
+      <table class="table table-bordered">
+        <tr>
+          <th>아이디</th>
+          <td><input type="text" id="name" name="name" placeholder="이름을 입력해주세요." class="form-control" /></td>
+          <td><input type="button" id="nameCheckBtn" value="중복확인" onclick="nameCheck()" class="btn btn-info" /></td>
+        </tr>
+        <tr>
+          <th>나이</th>
+          <td colspan="2"><input type="number" name="age" min="20" max="99" value="20" class="form-control" /></td>
+        </tr>
+      </table>
+      <div>
+        <input type="button" value="회원등록" th:onclick="fCheck()" class="btn btn-success" />
+        <input type="button" value="돌아가기" th:onclick="|location.href='@{/}'|" class="btn btn-warning" />
+      </div>
+    </form>
+  </div>
+</body>
+</html>

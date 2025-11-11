@@ -1,0 +1,17 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<body>
+	<p><br/></p>
+	<div class="container">
+		<h2>exam1파일입니다.</h2>
+		<p>메세지2: ${msg}</p>
+		<p><br/></p>
+		<input type="button" value="html이동" onclick="location.href='index.html'" />
+	</div>
+</body>
+</html>

@@ -1,0 +1,13 @@
+spring.application.name=demo2
+
+# server port setting(서버 포트 변경).
+server.port=9091
+
+# jsp setting(jsp 경로와 확장자).
+spring.mvc.view.prefix=/WEB-INF/views/
+spring.mvc.view.suffix=.jsp
+
+# database setting
+spring.datasource.url=jdbc:mysql://localhost:3306/springgroup
+spring.datasource.username=root
+spring.datasource.password=1234
