@@ -4,10 +4,6 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/basicLayout}">
   <th:block layout:fragment="css">
-    <!-- CSRF 설정 -->
-    <meta name="_csrf" th:content="${_csrf?.token}"/>
-    <meta name="_csrf_header" th:content="${_csrf?.headerName}"/>
-
     <script src="/ckeditor/ckeditor.js"></script>
   </th:block>
   <script layout:fragment="script" th:inline="javascript">

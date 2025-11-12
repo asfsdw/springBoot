@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/basicLayout}">
+<script layout:fragment="script" th:inline="javascript">
+  'use strict';
+  var token = $("meta[name='_csrf']").attr("content");
+  var header = $("meta[name='_csrf_header']").attr("content");
+
+
+  function replyCheck() {
+    let content = $("#content").val().trim();
+    if(content == '') {
+      alert("댓글을 입력해주세요.");
+      return false;
+    }
+
+    $.ajax({
+      url : "/board/boardReplyInput",
+      type: "post",
+      data: {
+        "parentId": [[${board.id}]],
+        "content" : content
+      },
+      beforeSend : (xhr) => xhr.setRequestHeader(header, token),
+      success : (res) => {
+        if(res == 1) {
+          alert("댓글이 등록되었습니다.");
+          location.reload();
+        }
+        else alert("댓글 등록에 실패했습니다.");
+      },
+      error : () => alert("전송오류")
+    });
+  }
+
+  function replyDeleteCheck(id) {
+    let ans = confirm("정말로 댓글을 삭제하시겠습니까?");
+    if(ans){
+      $.ajax({
+        url : "/board/boardReplyDelete",
+        type: "post",
+        data: {"id" : id},
+        beforeSend : (xhr) => xhr.setRequestHeader(header, token),
+        success : (res) => {
+          if(res == 1) {
+            alert("댓글이 삭제되었습니다.");
+            location.reload();
+          }
+          else alert("댓글 삭제에 실패했습니다.");
+        },
+        error : () => alert("전송오류")
+      });
+    }
+  }
+
+  function replyUpdateCheck(id) {
+    $("#replyUpdateForm"+id).show();
+  }
+  function replyUpdateViewClose(id) {
+    $("#replyUpdateForm"+id).hide();
+  }
+  function replyUpdateCheckOk(id) {
+    let content = $("#content"+id).val().trim();
+    if(content == '') {
+      alert("댓글을 입력해주세요.");
+      return false;
+    }
+
+    $.ajax({
+      url : "/board/boardReplyUpdate",
+      type: "post",
+      data: {
+        "id" : id,
+        "content" : content
+      },
+      beforeSend : (xhr) => xhr.setRequestHeader(header, token),
+      success : (res) => {
+        if(res == 1) {
+            alert("댓글이 수정되었습니다.");
+            location.reload();
+          }
+        else alert("댓글 수정에 실패했습니다.");
+      },
+      error : () => alert("전송오류")
+    });
+  }
+</script>
+<div layout:fragment="content">
+  <h2 class="text-center mb-4">글 내용 보기</h2>
+  <th:block th:if="${board.complaint == 'HI'}">
+    <hr class="border border-dark">
+    <h3 class="text-center text-danger">해당 게시글은 신고된 글입니다.</h3>
+    <hr class="border border-dark">
+    <div class="text-center">
+      <input type="button" value="돌아가기" onclick="location.href='boardList?pag=${pageDTO.pag}&pageSize=${pageDTO.pageSize}
+        &search=${pageDTO.search}&searchStr=${pageDTO.searchStr}'" class="btn btn-info"/>
+    </div>
+  </th:block>
+  <th:block th:if="${board.complaint != 'HI'}">
+    <table class="table table-bordered text-center border-secondary-subtle">
+      <tr>
+        <th class="table-secondary">글쓴이</th>
+        <td>[[${board.name}]]</td>
+        <th class="table-secondary">글쓴날짜</th>
+        <td>[[${#strings.substring(board.wDate,0,19)}]]</td>
+      </tr>
+      <tr>
+        <th class="table-secondary">글조회수</th>
+        <td>[[${board.readNum}]]</td>
+        <th class="table-secondary">접속IP</th>
+        <td>[[${board.hostIP}]]</td>
+      </tr>
+      <tr>
+        <th class="table-secondary">글제목</th>
+        <td colspan="3" class="text-start">[[${board.title}]]
+          (<a th:href="|javascript:goodCheck1()|" title="좋아요">❤️</a>([[${board.good}]]))
+          (<a th:href="|javascript:goodCheck2(1)|" title="좋아요">👍</a>
+          <a th:href="|javascript:goodCheck2(-1)|" title="싫어요">👎</a>([[${board.good}]]))
+        </td>
+      </tr>
+      <tr>
+        <th class="table-secondary">글내용</th>
+        <td colspan="3" style="height:250px" class="text-start" th:utext="${#strings.replace(board.content, newLine, '<br/>')}"></td>
+      </tr>
+    </table>
+    <!-- 댓글처리(리스트/입력) -->
+    <!-- 댓글 리스트 -->
+    <table class="table table-hover text-center">
+      <tr class="table-secondary">
+        <th>작성자</th>
+        <th>댓글내용</th>
+        <th>댓글일자</th>
+        <th>접속IP</th>
+      </tr>
+      <th:block th:each="replyDTO, st : ${replyList}">
+        <tr>
+          <td>[[${replyDTO.name}]]
+            <th:block th:if="${session.sName == replyDTO.name || session.sStrLevel == '관리자'}">
+              (<a th:href="|javascript:replyUpdateCheck(${replyDTO.id})|" title="댓글수정">√</a>)
+              (<a th:href="|javascript:replyDeleteCheck(${replyDTO.id})|" title="댓글삭제">x</a>)
+            </th:block>
+          </td>
+          <td class="text-start" th:utext="${#strings.replace(replyDTO.content, newLine, '<br/>')}"></td>
+          <td>[[${#strings.substring(replyDTO.wDate, 0, 10)}]]</td>
+          <td>[[${replyDTO.hostIP}]]</td>
+        </tr>
+        <!-- 아래로 댓글 수정 폼 보기 -->
+        <tr th:id="replyUpdateForm+${replyDTO.id}" style="display:none">
+          <td colspan="4">
+            <table class="table text-center">
+              <tr>
+                <td class="text-start" style="width:85%">
+                  댓글수정 :
+                  <textarea rows="4" th:id="content+${replyDTO.id}" class="form-control">[[${replyDTO.content}]]</textarea>
+                </td>
+                <td style="width:15%"><br/>
+                  <p>작성자 : [[${session.sName}]]</p>
+                  <p>
+                    <a th:href="|javascript:replyUpdateCheckOk(${replyDTO.id})|" class="badge bg-primary">댓글수정</a>
+                    <a th:href="|javascript:replyUpdateViewClose(${replyDTO.id})|" class="badge bg-warning">창닫기</a>
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </th:block>
+    </table>
+    <hr/>
+    <!-- 댓글 입력창 -->
+    <table class="table text-center">
+      <tr>
+        <td class="text-start" style="width:85%">
+          댓글내용 :
+          <textarea rows="4" id="content" class="form-control"></textarea>
+        </td>
+        <td style="width:15%"><br/>
+          <p>작성자 : [[${session.sName}]]</p>
+          <p><input type="button" value="댓글달기" onclick="replyCheck()" class="btn btn-info btn-sm"/></p>
+        </td>
+      </tr>
+    </table>
+    <div class="row">
+      <div class="col">
+        <input type="button" value="돌아가기" th:onclick="|location.href='@{boardList(pag=${pageDTO.pag},pageSize=${pageDTO.pageSize}
+          ,search=${pageDTO?.search},searchStr=${pageDTO?.searchStr})}'|" class="btn btn-info"/>
+      </div>
+      <div class="col">
+        <th:block th:if="${session.sName != board.name && board.complaint == 'NO'}">
+          <a href="#" data-bs-toggle="modal" data-bs-target="#myModal" class="btn btn-danger">신고하기</a>
+        </th:block>
+        <th:block th:if="${board.complaint == 'OK'}"><font color="red"><b>현재 게시글은 신고된 글입니다.</b></font></th:block>
+      </div>
+      <th:block th:if="${session.sName == board.name || session.sStrLevel == '관리자'}">
+        <div class="col">
+          <th:block th:if="${session.sName == board.name}">
+            <input type="button" value="수정" th:onclick="|location.href='@{boardUpdate(id=${board.id},pag=${pageDTO.pag}
+              ,pageSize=${pageDTO.pageSize},search=${pageDTO?.search},searchStr=${pageDTO?.searchStr})}'|" class="btn btn-warning"/>
+          </th:block>
+          <input type="button" value="삭제" onclick="delCheck()" class="btn btn-danger"/>
+        </div>
+      </th:block>
+      <p></p>
+      <!--다음글/이전글 시작-->
+      <div class="row text-start">
+        <div class="col">
+          <th:block th:if="${nextDTO != null}">
+            <a th:href="@{boardContent(id=${nextDTO.id},pag=${pageDTO.pag},pageSize=${pageDTO.pageSize}
+              ,search=${pageDTO?.search},searchStr=${pageDTO?.searchStr})}">다음글 : [[${nextDTO.title}]]</a><br/>
+          </th:block>
+          <th:block th:if="${preDTO != null}">
+            <a th:href="@{boardContent(id=${preDTO.id},pag=${pageDTO.pag},pageSize=${pageDTO.pageSize}
+              ,search=${pageDTO?.search},searchStr=${pageDTO?.searchStr})}">이전글 : [[${preDTO.title}]]</a><br/>
+          </th:block>
+        </div>
+      </div>
+      <hr/>
+    </div>
+    <!--다음글/이전글 끝-->
+  </th:block>
+</div>
+</html>

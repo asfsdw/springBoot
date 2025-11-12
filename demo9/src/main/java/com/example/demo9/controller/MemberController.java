@@ -89,7 +89,6 @@ public class MemberController {
     try {
       if(authentication != null) {
         String name = session.getAttribute("sName").toString();
-        session.invalidate();
         new SecurityContextLogoutHandler().logout(request, response, authentication);
         rttr.addFlashAttribute("message", name+"님 로그아웃되셨습니다.");
         return "redirect:/member/memberLogin";

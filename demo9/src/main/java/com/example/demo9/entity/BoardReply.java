@@ -26,9 +26,11 @@ public class BoardReply {
   private Long id;
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "parent_id", referencedColumnName = "board_id", nullable = false)
+  @ToString.Exclude
   private Board board;
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "email", referencedColumnName = "email", nullable = false)
+  @ToString.Exclude
   private Member member;
   @Column(nullable = false, length = 20)
   private String name;

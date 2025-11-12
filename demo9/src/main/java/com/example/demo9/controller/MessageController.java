@@ -22,7 +22,6 @@ public class MessageController {
 		if(msgFlag.equals("guestInputOk")) {
 			model.addAttribute("message", "방명록에 글이 등록되었습니다.");
 			model.addAttribute("url", "/guest/guestList");
-      System.out.println("통과4");
 		}
 		else if(msgFlag.equals("boardInputOk")) {
 			model.addAttribute("message", "글이 입력되었습니다.");

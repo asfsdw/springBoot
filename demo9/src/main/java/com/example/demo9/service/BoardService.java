@@ -19,7 +19,7 @@ public class BoardService {
 
   public Page<Board> getBoardList(int pag, int pageSize) {
     BooleanBuilder builder = new BooleanBuilder();
-    Pageable pageable = PageRequest.of(pag, pageSize, Sort.by(Sort.Order.desc("id")));
+    PageRequest pageable = PageRequest.of(pag, pageSize, Sort.by("id").descending());
     return boardRepository.findAll(builder, pageable);
   }
 
@@ -30,5 +30,18 @@ public class BoardService {
     catch (Exception e) {
       throw new IllegalStateException("게시글 등록에 실패했습니다.");
     }
+  }
+
+  public Board getBoardId(Long id) {
+    return boardRepository.findById(id).orElse(null);
+  }
+
+  public void setBoardReadNum(Long id) {
+    boardRepository.setBoardReadNum(id);
+  }
+
+  public Board getPreNextSearch(Long id, String flag) {
+    if(flag.equals("pre")) return boardRepository.findPrevious(id);
+    else return boardRepository.findNext(id);
   }
 }

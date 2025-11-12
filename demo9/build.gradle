@@ -24,15 +24,6 @@ dependencies {
           "jakarta.annotation:jakarta.annotation-api",
           "com.querydsl:querydsl-apt:${queryDslVersion}:jakarta")
 }
-sourceSets {
-  main {
-    java {
-      srcDirs = ["$projectDir/src/main/java", "$projectDir/build/generated"]
-    }
-  }
-}
-
-compileJava.dependsOn('clean')
 // querydsl 추가 끝2
 
 java {

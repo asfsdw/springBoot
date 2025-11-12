@@ -1,6 +1,9 @@
 package com.example.demo9.dto;
 
+import com.example.demo9.entity.Board;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,4 +28,6 @@ public class PageDTO {
   private String searchStr;	// 검색어.
   private String searchKr;  // 검색 결과창에 search를 한국어로 주기 위한 변수.
   private String flag;			// flag는 totRecCnt에서 조건을 줄 때 사용한다(7일 이내 새글 등).
+
+  private List<Board> boardList;
 }

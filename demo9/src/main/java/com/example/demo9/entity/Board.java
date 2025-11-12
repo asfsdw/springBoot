@@ -30,6 +30,7 @@ public class Board {
   private Long id;
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "email", referencedColumnName = "email")
+  @ToString.Exclude
   private Member member;
   @Column(nullable = false, length = 20)
   private String name;
@@ -53,6 +54,7 @@ public class Board {
   private String complaint;
 
   // 댓글 Entity와의 연관관계.
+  @Builder.Default
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "board")
   private List<BoardReply> boardReply = new ArrayList<>();
 
