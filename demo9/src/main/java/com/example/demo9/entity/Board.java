@@ -55,10 +55,10 @@ public class Board {
 
   // 댓글 Entity와의 연관관계.
   @Builder.Default
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "board")
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "board", cascade = CascadeType.REMOVE)
   private List<BoardReply> boardReply = new ArrayList<>();
 
-  // 테이블에 만들어지지 않는 필드로 계산시에 사용하기 위한 필드 선언: @Transient
+  // 테이블에 만들어지지 않는 필드로 계산시에 사용하기 위한 필드 선언: @Transient.
   @Transient
   private long dateDiff;
   @Transient

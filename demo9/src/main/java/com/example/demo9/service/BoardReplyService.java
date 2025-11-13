@@ -46,4 +46,8 @@ public class BoardReplyService {
     boardReply.setContent(content);
     boardReplyRepository.save(boardReply);
   }
+
+  public List<BoardReply> getBoardReplyBoardId(Long id) {
+    return boardReplyRepository.findByBoardId(id);
+  }
 }

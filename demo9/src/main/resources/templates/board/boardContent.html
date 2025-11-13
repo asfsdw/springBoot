@@ -85,6 +85,51 @@
       error : () => alert("전송오류")
     });
   }
+
+  function goodCheck1() {
+    $.ajax({
+      url : "/board/boardGood",
+      type: "post",
+      data: {"id" : [[${board.id}]]},
+      beforeSend : (xhr) => xhr.setRequestHeader(header, token),
+      success : (res) => location.reload(),
+      error : () => alert("전송오류")
+    });
+  }
+  function goodCheck2(flag) {
+    $.ajax({
+      url : "/board/boardGood",
+      type: "post",
+      data: {
+        "id" : [[${board.id}]],
+        "flag" : flag
+      },
+      beforeSend : (xhr) => xhr.setRequestHeader(header, token),
+      success : (res) => location.reload(),
+      error : () => alert("전송오류")
+    });
+  }
+
+  function delCheck() {
+    let ans = confirm("게시글을 삭제하시겠습니까?");
+    if(ans) {
+      $.ajax({
+        url : "/board/boardDelete",
+        type: "post",
+        data: {"id" : [[${board.id}]]},
+        beforeSend : (xhr) => xhr.setRequestHeader(header, token),
+        success : (res) => {
+          if(res == 1) {
+            alert("게시글이 삭제되었습니다.");
+            location.href = "/board/boardList";
+          }
+          else if(res == 2) alert("게시글에 댓글이 존재하기 때문에 삭제하지 못했습니다.");
+          else alert("삭제에 실패했습니다.");
+        },
+        error : () => alert("전송오류")
+      });
+    };
+  }
 </script>
 <div layout:fragment="content">
   <h2 class="text-center mb-4">글 내용 보기</h2>
@@ -115,8 +160,8 @@
         <th class="table-secondary">글제목</th>
         <td colspan="3" class="text-start">[[${board.title}]]
           (<a th:href="|javascript:goodCheck1()|" title="좋아요">❤️</a>([[${board.good}]]))
-          (<a th:href="|javascript:goodCheck2(1)|" title="좋아요">👍</a>
-          <a th:href="|javascript:goodCheck2(-1)|" title="싫어요">👎</a>([[${board.good}]]))
+          (<a th:href="|javascript:goodCheck2('plus')|" title="좋아요">👍</a>
+          <a th:href="|javascript:goodCheck2('minus')|" title="싫어요">👎</a>([[${board.good}]]))
         </td>
       </tr>
       <tr>
@@ -141,7 +186,13 @@
               (<a th:href="|javascript:replyDeleteCheck(${replyDTO.id})|" title="댓글삭제">x</a>)
             </th:block>
           </td>
-          <td class="text-start" th:utext="${#strings.replace(replyDTO.content, newLine, '<br/>')}"></td>
+          <!--<td class="text-start" th:utext="${replyDTO.content}"></td>-->
+          <!--<td class="text-start" th:utext="${#strings.replace(replyDTO.content, newLine, '<br/>')}"></td>-->
+          <!--<td class="text-start" th:utext="${#strings.replace(replyDTO.content, '\n', '<br/>')}"></td>-->
+          <!--<td class="text-start" th:utext="${#strings.replace(replyDTO.content, '\\r\\n', '<br/>')}"></td>-->
+          <!--<td class="text-start" th:utext="${#strings.replace(replyDTO.content, '\n\r', '<br/>')}"></td>-->
+          <!--<td class="text-start" th:utext="${#strings.replace(replyDTO.content, '0D0A', '<br/>')}"></td>-->
+          <td th:text="${replyDTO.content}" style="white-space: pre-line;" class="text-start"></td>
           <td>[[${#strings.substring(replyDTO.wDate, 0, 10)}]]</td>
           <td>[[${replyDTO.hostIP}]]</td>
         </tr>
@@ -192,7 +243,8 @@
         </th:block>
         <th:block th:if="${board.complaint == 'OK'}"><font color="red"><b>현재 게시글은 신고된 글입니다.</b></font></th:block>
       </div>
-      <th:block th:if="${session.sName == board.name || session.sStrLevel == '관리자'}">
+      <!--<th:block th:if="${session.sName == board.name || session.sStrLevel == '관리자'}">-->
+      <th:block th:if="${pageDTO.isOwner}">
         <div class="col">
           <th:block th:if="${session.sName == board.name}">
             <input type="button" value="수정" th:onclick="|location.href='@{boardUpdate(id=${board.id},pag=${pageDTO.pag}

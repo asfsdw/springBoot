@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+
 @Service
 @RequiredArgsConstructor
 public class BoardService {
@@ -43,5 +45,31 @@ public class BoardService {
   public Board getPreNextSearch(Long id, String flag) {
     if(flag.equals("pre")) return boardRepository.findPrevious(id);
     else return boardRepository.findNext(id);
+  }
+
+  public void setBoardGood(String flag, Long id) {
+    if(flag.equals("plus")) boardRepository.setBoardGood(id, 1);
+    else boardRepository.setBoardGood(id, -1);
+  }
+
+  public void setBoardImageDelete(String realPath, String content) {
+    int position = 21;
+    String nextImg = content.substring(content.indexOf("src=\"/")+position);
+    boolean sw = true;
+
+    while(sw) {
+      String imgFile = nextImg.substring(0, nextImg.indexOf("\""));
+      String oFilePath = realPath + imgFile;
+
+      File delFile = new File(oFilePath);
+      if(delFile.exists()) delFile.delete();
+
+      if(nextImg.indexOf("src=\"/") == -1) sw = false;
+      else nextImg = nextImg.substring(nextImg.indexOf("src=\"/")+position);
+    }
+  }
+
+  public void setBoardDelete(Long id) {
+    boardRepository.deleteById(id);
   }
 }

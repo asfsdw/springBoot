@@ -27,4 +27,9 @@ public interface BoardRepository extends JpaRepository<Board, Long>, QuerydslPre
 
   @Query("select b from Board b where b.id > :id order by b.id limit 1")
   Board findNext(Long id);
+
+  @Modifying(clearAutomatically = true)
+  @Transactional
+  @Query("update Board set good = good + :good where id = :id")
+  void setBoardGood(Long id, int good);
 }

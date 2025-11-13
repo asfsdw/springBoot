@@ -35,6 +35,7 @@
       <tr class="table-secondary">
         <th>번호</th>
         <th>글제목</th>
+        <th>댓글 수</th>
         <th>글쓴이</th>
         <th>글쓴날짜</th>
         <th>조회수(좋아요)</th>
@@ -48,8 +49,11 @@
             </a>
             <th:block th:if="${board.hourDiff <= 24}" th:utext="@{<img src='/images/new.gif' />}"></th:block>
           </td>
+          <td>[[${board.replyCnt}]]</td>
           <td>[[${board.name}]]</td>
-          <td th:text="${#strings.substring(#strings.replace(board.wDate,'T',' '),0,19)}"></td>
+          <td th:if="${board.hourDiff <= 23}" th:text="${#strings.substring(board.wDate,11,19)}"></td>
+          <td th:if="${board.DateDiff == 1}" th:text="${#strings.substring(#strings.replace(board.wDate,'T',' '),0,19)}"></td>
+          <td th:if="${board.DateDiff > 1}" th:text="${#strings.substring(board.wDate,0,10)}"></td>
           <td>[[${board.readNum}]]([[${board.good}]])</td>
         </tr>
       </th:block>
