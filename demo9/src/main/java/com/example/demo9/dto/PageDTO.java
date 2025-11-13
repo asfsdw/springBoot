@@ -1,6 +1,7 @@
 package com.example.demo9.dto;
 
 import com.example.demo9.entity.Board;
+import com.example.demo9.entity.Member;
 import lombok.*;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class PageDTO {
   private String flag;			// flag는 totRecCnt에서 조건을 줄 때 사용한다(7일 이내 새글 등).
 
   private List<Board> boardList;
+  private List<Member> memberList;
 
   private boolean isOwner;  // 본인 인증여부를 확인하기 위한 변수.
 }

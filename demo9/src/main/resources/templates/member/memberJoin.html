@@ -13,22 +13,22 @@
     <form role="form" method="post" th:object="${dto}">
       <div class="input-group mb-3">
         <label th:for="email" class="input-group-text">이메일주소</label>
-        <input type="email" th:field="*{email}" class="form-control" placeholder="이메일을 입력해주세요">
+        <input type="email" th:field="*{email}" placeholder="이메일을 입력해주세요." class="form-control" />
       </div>
       <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="fieldError mb-3" style="color:red; font-size:13px; text-align:left">Incorrect data</div>
       <div class="input-group mb-3">
         <label th:for="password" class="input-group-text">비밀번호</label>
-        <input type="password" th:field="*{password}" class="form-control" placeholder="비밀번호 입력">
+        <input type="password" th:field="*{password}" placeholder="비밀번호를 입력해주세요." class="form-control" />
       </div>
       <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="fieldError mb-3" style="color:red; font-size:13px; text-align:left">Incorrect data</div>
       <div class="input-group mb-3">
         <label th:for="name" class="input-group-text">이름</label>
-        <input type="text"  th:field="*{name}" class="form-control" placeholder="이름을 입력해주세요">
+        <input type="text" th:field="*{name}" placeholder="이름을 입력해주세요." class="form-control" />
       </div>
       <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError mb-3" style="color:red; font-size:13px; text-align:left">Incorrect data</div>
       <div class="input-group mb-3">
         <label th:for="address" class="input-group-text">주소</label>
-        <input type="text"  th:field="*{address}" class="form-control" placeholder="주소를 입력해주세요">
+        <input type="text" th:field="*{address}" placeholder="주소를 입력해주세요." class="form-control" />
       </div>
       <div class="mb-3" style="text-align: center">
         <button type="submit" class="btn btn-primary">Submit</button>

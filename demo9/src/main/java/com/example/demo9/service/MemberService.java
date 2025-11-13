@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -45,5 +46,30 @@ public class MemberService implements UserDetailsService {
             .password(member.get().getPassword())
             .roles(member.get().getRole().toString())
             .build();
+  }
+
+  public List<Member> getMemberList() {
+    return memberRepository.findAll();
+  }
+
+  public void setMemberUpdate(MemberDTO dto) {
+    memberRepository.setMemberUpdate(dto);
+  }
+
+  public void setMemberPasswordUpdate(String email, String password) {
+    Member member = memberRepository.findByEmail(email).orElse(null);
+    memberRepository.save(Member.builder()
+                    .id(member.getId())
+                    .email(member.getEmail())
+                    .password(passwordEncoder.encode(password))
+                    .name(member.getName())
+                    .address(member.getAddress())
+                    .role(member.getRole())
+                    .build());
+  }
+
+  public void setMemberDelete(String email) {
+    System.out.println(email);
+    memberRepository.deleteByEmail(email);
   }
 }

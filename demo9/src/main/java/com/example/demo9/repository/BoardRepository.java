@@ -17,8 +17,8 @@ public interface BoardRepository extends JpaRepository<Board, Long>, QuerydslPre
 
   Page<Board> findByContentContaining(String search, PageRequest pageable);
 
-  @Modifying(clearAutomatically = true)
   @Transactional
+  @Modifying(clearAutomatically = true)
   @Query("update Board set readNum = readNum+1 where id = :id")
   void setBoardReadNum(Long id);
 
@@ -28,8 +28,8 @@ public interface BoardRepository extends JpaRepository<Board, Long>, QuerydslPre
   @Query("select b from Board b where b.id > :id order by b.id limit 1")
   Board findNext(Long id);
 
-  @Modifying(clearAutomatically = true)
   @Transactional
+  @Modifying(clearAutomatically = true)
   @Query("update Board set good = good + :good where id = :id")
   void setBoardGood(Long id, int good);
 }

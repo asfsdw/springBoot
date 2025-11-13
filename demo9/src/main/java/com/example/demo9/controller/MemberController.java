@@ -1,5 +1,6 @@
 package com.example.demo9.controller;
 
+import com.example.demo9.common.Pagination;
 import com.example.demo9.dto.MemberDTO;
 import com.example.demo9.entity.Member;
 import com.example.demo9.service.MemberService;
@@ -9,15 +10,14 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
@@ -27,7 +27,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @RequestMapping("/member")
 public class MemberController {
+  @Autowired
+  PasswordEncoder passwordEncoder;
+
   private final MemberService memberService;
+  private final Pagination pagination;
 
   @GetMapping("/memberLogin")
   public String memberLoginGet() {
@@ -99,5 +103,72 @@ public class MemberController {
     }
     rttr.addFlashAttribute("message", "잘못된 요청입니다.");
     return "redirect:/";
+  }
+
+  @GetMapping("/memberPasswordCheck")
+  public String memberUpdateGet(Model model, String flag) {
+    model.addAttribute("flag", flag);
+    return "member/memberPasswordCheck";
+  }
+  @PostMapping("/memberPasswordCheck")
+  public String memberUpdatePost(Authentication authentication, Model model, RedirectAttributes rttr,
+                                 String flag, String password) {
+    if(!passwordEncoder.matches(password,memberService.getMemberEmail(authentication.getName()).orElse(null).getPassword())) {
+      return "redirect:/message/passwordWrong?flag="+flag;
+    }
+
+    if(flag.equals("1")) {
+      rttr.addAttribute("flag", flag);
+      return "redirect:/member/memberUpdate";
+    }
+    else if(flag.equals("2")) {
+      model.addAttribute("flag", "3");
+      return "member/memberPasswordCheck";
+    }
+    return "redirect:/message/wrongAccess";
+  }
+
+  @GetMapping("/memberUpdate")
+  public String memberUpdateGet(Authentication authentication, Model model, String flag) {
+    model.addAttribute("dto", memberService.getMemberEmail(authentication.getName()).orElse(null));
+    return "member/memberUpdate";
+  }
+  @PostMapping("/memberUpdate")
+  public String memberUpdatePost(MemberDTO dto) {
+    try {
+      memberService.setMemberUpdate(dto);
+    } catch (Exception e) {return "redirect:/message/memberUpdateNo";}
+    return "redirect:/message/memberUpdateOk";
+  }
+  @ResponseBody
+  @PostMapping("/memberValidate")
+  public String memberValidate(String name) {
+    if(name.isEmpty()) return "이름을 입력해주세요.";
+    else if(name.length() < 2) return "이름을 최소 2글자 이상 입력해주세요.";
+    else return "";
+  }
+  /*
+  @ResponseBody
+  @PostMapping("/memberValidate")
+  public String memberValidate(@Valid MemberDTO dto, BindingResult bindingResult) {
+    if(bindingResult.hasErrors()) return bindingResult.getFieldError().getDefaultMessage();
+    else return "";
+  }
+  */
+
+  @PostMapping("/memberPasswordUpdate")
+  public String memberPasswordUpdate(Authentication authentication, String password) {
+    try {
+      memberService.setMemberPasswordUpdate(authentication.getName(), password);
+    } catch (Exception e) {return "redirect:/message/passwordUpdateNo";}
+   return "redirect:/message/passwordUpdateOk";
+  }
+
+  @GetMapping("/memberDelete")
+  public String memberDeleteGet(Authentication authentication) {
+    try {
+      memberService.setMemberDelete(authentication.getName());
+    } catch (Exception e) {return "redirect:/message/memberDeleteNo";}
+    return "redirect:/message/memberDeleteOk";
   }
 }

@@ -2,7 +2,9 @@ package com.example.demo9.common;
 
 import com.example.demo9.dto.PageDTO;
 import com.example.demo9.entity.Board;
+import com.example.demo9.entity.Member;
 import com.example.demo9.repository.BoardRepository;
+import com.example.demo9.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,13 +19,12 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class Pagination {
-
   private final BoardRepository boardRepository;
+  private final MemberRepository memberRepository;
 
   public PageDTO pagination(PageDTO dto) {	// 각각의 변수로 받으면 초기값처리를 spring이 자동할수 있으나, 객체로 받으면 개별 문자/객체 자료에는 null이 들어오기에 따로 초기화 작업처리해야함.
     int pag = dto.getPag();
     int pageSize = dto.getPageSize() == 0 ? 10 : dto.getPageSize();
-    //int level = dto.getLevel() == 0 ? 99 : dto.getLevel();
     String part = dto.getPart() == null ? "" : dto.getPart();
 
     int totRecCnt = 0, totPage = 0;
@@ -51,6 +52,21 @@ public class Pagination {
       dto.setBoardList(boardList);
 
       totRecCnt = (int) page.getTotalElements();
+      totPage = page.getTotalPages();
+    }
+    else if(dto.getSection().equals("member")) {
+      Page<Member> page;
+      if(dto.getSearch() != null) {
+        if(dto.getSearch().equals("email")) page = memberRepository.findByEmailContaining(dto.getSearchStr(), pageable);
+        else if(dto.getSearch().equals("name")) page = memberRepository.findByNameContaining(dto.getSearchStr(), pageable);
+        else page = memberRepository.findAll(pageable);
+      }
+      else page = memberRepository.findAll(pageable);
+
+
+      dto.setMemberList(page.getContent());
+
+      totRecCnt = (int)page.getTotalElements();
       totPage = page.getTotalPages();
     }
 
@@ -81,8 +97,6 @@ public class Pagination {
 		dto.setPart(part);
 		dto.setFlag(dto.getFlag());
 		
-		//dto.setLevel(level);
-
 		return dto;
 	}
 
