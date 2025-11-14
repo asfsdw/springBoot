@@ -59,6 +59,14 @@ public class MessageController {
 			model.addAttribute("message", "회원탈퇴되었습니다.");
 			model.addAttribute("url", "/member/memberLogout");
 		}
+    else if(msgFlag.equals("fileUploadNo")) {
+			model.addAttribute("message", "파일 업로드에 실패했습니다.");
+			model.addAttribute("url", "/pds/pdsList");
+		}
+    else if(msgFlag.equals("fileUploadOk")) {
+			model.addAttribute("message", "파일이 업로드되었습니다.");
+			model.addAttribute("url", "/pds/pdsList");
+		}
 		return "include/message";
 	}
 }

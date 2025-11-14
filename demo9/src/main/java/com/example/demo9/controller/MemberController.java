@@ -2,6 +2,7 @@ package com.example.demo9.controller;
 
 import com.example.demo9.common.Pagination;
 import com.example.demo9.dto.MemberDTO;
+import com.example.demo9.dto.PageDTO;
 import com.example.demo9.entity.Member;
 import com.example.demo9.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -105,6 +106,15 @@ public class MemberController {
     return "redirect:/";
   }
 
+  @GetMapping("/memberList")
+  public String memberListGet(Model model, PageDTO pageDTO) {
+    pageDTO.setSection("member");
+    pageDTO = pagination.pagination(pageDTO);
+
+    model.addAttribute("pageDTO", pageDTO);
+    return "member/memberList";
+  }
+
   @GetMapping("/memberPasswordCheck")
   public String memberUpdateGet(Model model, String flag) {
     model.addAttribute("flag", flag);
@@ -134,7 +144,9 @@ public class MemberController {
     return "member/memberUpdate";
   }
   @PostMapping("/memberUpdate")
-  public String memberUpdatePost(MemberDTO dto) {
+  public String memberUpdatePost(@Valid @ModelAttribute("dto") MemberDTO dto, BindingResult bindingResult) {
+    if(bindingResult.hasErrors()) return "member/memberUpdate";
+
     try {
       memberService.setMemberUpdate(dto);
     } catch (Exception e) {return "redirect:/message/memberUpdateNo";}
@@ -164,10 +176,23 @@ public class MemberController {
    return "redirect:/message/passwordUpdateOk";
   }
 
+  /*
   @GetMapping("/memberDelete")
-  public String memberDeleteGet(Authentication authentication) {
+  public String memberDeleteGet(Authentication authentication, HttpServletRequest request, HttpServletResponse response) {
     try {
       memberService.setMemberDelete(authentication.getName());
+
+      new SecurityContextLogoutHandler().logout(request, response, authentication);
+    } catch (Exception e) {return "redirect:/message/memberDeleteNo";}
+    return "redirect:/message/memberDeleteOk";
+  }
+  */
+  @GetMapping("/memberDelete")
+  public String memberDeleteGet(Authentication authentication, HttpServletRequest request, HttpServletResponse response) {
+    try {
+      memberService.setMemberDelete(authentication.getName());
+
+      new SecurityContextLogoutHandler().logout(request, response, authentication);
     } catch (Exception e) {return "redirect:/message/memberDeleteNo";}
     return "redirect:/message/memberDeleteOk";
   }

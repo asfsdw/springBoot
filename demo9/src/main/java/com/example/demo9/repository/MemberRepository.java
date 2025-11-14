@@ -1,5 +1,6 @@
 package com.example.demo9.repository;
 
+import com.example.demo9.constant.UserDel;
 import com.example.demo9.dto.MemberDTO;
 import com.example.demo9.entity.Member;
 import jakarta.transaction.Transactional;
@@ -29,4 +30,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
   @Transactional
   @Modifying(clearAutomatically = true)
   void deleteByEmail(String email);
+
+  Optional<Member> findByEmailAndUserDel(String email, UserDel userDel);
 }

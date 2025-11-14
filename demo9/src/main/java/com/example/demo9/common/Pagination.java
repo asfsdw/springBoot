@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -56,13 +55,13 @@ public class Pagination {
     }
     else if(dto.getSection().equals("member")) {
       Page<Member> page;
+
       if(dto.getSearch() != null) {
         if(dto.getSearch().equals("email")) page = memberRepository.findByEmailContaining(dto.getSearchStr(), pageable);
         else if(dto.getSearch().equals("name")) page = memberRepository.findByNameContaining(dto.getSearchStr(), pageable);
         else page = memberRepository.findAll(pageable);
       }
       else page = memberRepository.findAll(pageable);
-
 
       dto.setMemberList(page.getContent());
 
@@ -99,6 +98,4 @@ public class Pagination {
 		
 		return dto;
 	}
-
-
 }

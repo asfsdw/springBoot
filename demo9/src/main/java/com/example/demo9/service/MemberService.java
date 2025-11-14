@@ -1,5 +1,6 @@
 package com.example.demo9.service;
 
+import com.example.demo9.constant.UserDel;
 import com.example.demo9.dto.MemberDTO;
 import com.example.demo9.entity.Member;
 import com.example.demo9.repository.MemberRepository;
@@ -39,13 +40,17 @@ public class MemberService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-    Optional<Member> member = Optional.ofNullable(getMemberEmail(email)
-            .orElseThrow(() -> new UsernameNotFoundException("가입되지 않은 이메일입니다.")));
+    Optional<Member> member = Optional.ofNullable(getMemberEmailAndUserDel(email, UserDel.NO)
+            .orElseThrow(() -> new UsernameNotFoundException("가입되지 않은 이메일입니다."))); // SecurityConfig에 로그인 실패를 따로 적용해뒀기 때문에 실제로 사용하지는 않는다.
     return User.builder()
             .username(member.get().getEmail())
             .password(member.get().getPassword())
             .roles(member.get().getRole().toString())
             .build();
+  }
+
+  private Optional<Member> getMemberEmailAndUserDel(String email, UserDel userDel) {
+    return memberRepository.findByEmailAndUserDel(email, userDel);
   }
 
   public List<Member> getMemberList() {
@@ -69,7 +74,8 @@ public class MemberService implements UserDetailsService {
   }
 
   public void setMemberDelete(String email) {
-    System.out.println(email);
-    memberRepository.deleteByEmail(email);
+    Member member = memberRepository.findByEmail(email).orElse(null);
+    member.setUserDel(UserDel.OK);
+    memberRepository.save(member);
   }
 }

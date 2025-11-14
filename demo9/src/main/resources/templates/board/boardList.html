@@ -52,7 +52,7 @@
           <td>[[${board.replyCnt}]]</td>
           <td>[[${board.name}]]</td>
           <td th:if="${board.hourDiff <= 23}" th:text="${#strings.substring(board.wDate,11,19)}"></td>
-          <td th:if="${board.DateDiff == 1}" th:text="${#strings.substring(#strings.replace(board.wDate,'T',' '),0,19)}"></td>
+          <td th:if="${board.DateDiff == 1 && board.hourDiff > 23}" th:text="${#strings.substring(#strings.replace(board.wDate,'T',' '),0,19)}"></td>
           <td th:if="${board.DateDiff > 1}" th:text="${#strings.substring(board.wDate,0,10)}"></td>
           <td>[[${board.readNum}]]([[${board.good}]])</td>
         </tr>

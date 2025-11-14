@@ -31,6 +31,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final EnumPath<com.example.demo9.constant.Role> role = createEnum("role", com.example.demo9.constant.Role.class);
 
+    public final EnumPath<com.example.demo9.constant.UserDel> userDel = createEnum("userDel", com.example.demo9.constant.UserDel.class);
+
     public QMember(String variable) {
         super(Member.class, forVariable(variable));
     }

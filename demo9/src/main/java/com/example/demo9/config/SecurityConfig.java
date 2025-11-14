@@ -37,10 +37,10 @@ public class SecurityConfig {
 
     // 각 페이지에 대한 접근 권한설정.
     http.authorizeHttpRequests(request -> request
-            .requestMatchers("/images/**", "/message/**", "/ckeditorUpload/**").permitAll()
-            .requestMatchers("/", "/css/**", "/js/**", "/guest/**").permitAll()
-            .requestMatchers("/member/memberJoin").permitAll()
-            .requestMatchers("/member/memberLoginOk","/member/memberLogout","/member/memberMain").authenticated()
+            .requestMatchers("/images/**", "/ckeditorUpload/**", "/css/**", "/js/**").permitAll()
+            .requestMatchers("/", "/message/**", "/guest/**", "/member/memberJoin").permitAll()
+            // Security는 허용한 곳이 아니면 막아주기 때문에 authenticated로 막아줄 필요가 없다.
+            // .requestMatchers("/member/memberLoginOk","/member/memberLogout","/member/memberMain").authenticated()
             .requestMatchers("/admin/**").hasRole("ADMIN")
             .anyRequest().authenticated()
     );

@@ -1,14 +1,18 @@
 package com.example.demo9.entity;
 
 import com.example.demo9.constant.Role;
+import com.example.demo9.constant.UserDel;
 import com.example.demo9.dto.MemberDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
 @Table(name = "member1")
+@DynamicInsert
 @Getter
 @Setter
 @ToString
@@ -32,6 +36,11 @@ public class Member {
   @Enumerated(EnumType.STRING)
   private Role role;
 
+  @Enumerated(EnumType.STRING)
+  @ColumnDefault("'NO'")
+  @Column(nullable = false)
+  private UserDel userDel;
+
   public static Member dtoToEntity(PasswordEncoder passwordEncoder, MemberDTO dto) {
     return Member.builder()
             .email(dto.getEmail())
@@ -39,6 +48,7 @@ public class Member {
             .name(dto.getName())
             .address(dto.getAddress())
             .role(Role.USER)
+            .userDel(UserDel.NO)
             .build();
   }
 }

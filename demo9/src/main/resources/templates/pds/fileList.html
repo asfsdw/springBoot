@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+                xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+                layout:decorate="~{layouts/basicLayout}">
+  <script layout:fragment="script" th:inline="javascript">
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+
+    // 전체선택
+    $(function(){
+      $("#checkAll").click(function(){
+        if($("#checkAll").prop("checked")) $(".chk").prop("checked", true);
+        else $(".chk").prop("checked", false);
+      });
+    });
+    // 선택반전
+    function reverseCheck() {
+      for(let i=0; i<myform.chk.length; i++) {
+        myform.chk[i].checked = !myform.chk[i].checked;
+      }
+    }
+
+    // 고유번호 클릭시 그림 모달로 표시하기
+    function imgCheck(file) {
+      $(".modal-header .modal-title").html("파일명 : " + file);
+      let ext = file.substring(file.lastIndexOf(".")+1).toLowerCase();
+
+      if(ext == 'jpg' || ext == 'gif' || ext == 'png') {
+        $(".modal-body #imgSrc").attr("src","/work/uploadTest/"+file);
+      }
+      else {
+        $(".modal-body #imgSrc").attr("src","/images/noimage.jpg");
+      }
+      $(".modal-body #fileName").text(file);
+    }
+
+    // 파일삭제
+    function selectDelCheck() {
+      let ans = confirm("선택된 모든 게시물을 삭제 하시겠습니까?");
+      if(ans) {
+        let delItems = "";
+        for(let i=0; i<myform.chk.length; i++) {
+          if(myform.chk[i].checked == true) delItems += myform.chk[i].value + "/";
+        }
+        if(delItems == "") {
+          alert("한개 이상을 선택후 처리하세요.");
+          return false;
+        }
+
+        $.ajax({
+          url  : "/pds/fileSelectDelete",
+          type : "post",
+          data : {"delItems" : delItems},
+          beforeSend : (xhr) => xhr.setRequestHeader(header, token),
+          success: (res) => {
+            if(res == 1) {
+              alert("선택된 파일을 삭제처리 하였습니다.");
+              location.reload();
+            }
+          },
+          error : () => alert("전송오류!!")
+        });
+      }
+    }
+  </script>
+  <div layout:fragment="content">
+    <h2 class="text-center">서버 파일 리스트</h2>
+    <hr/>
+    <p>서버의 파일 경로 : /webapp/work/uploadTest/파일명(총 : <b>[[${fileLength}]]</b>개)</p>
+    <hr/>
+    <form name="myform">
+      <table class="table table-hover text-center">
+        <tr class="table-secondary">
+          <th>선택</th><th>번호</th><th>파일명</th><th>그림파일</th>
+        </tr>
+        <th:block th:if="${#lists.isEmpty(files)}">
+          <td colspan="4" class="text-center">파일이 존재하지 않습니다.</td>
+        </th:block>
+        <th:block th:if="${!#lists.isEmpty(files)}">
+          <div class="row mb-2">
+            <div class="col text-start">
+              <input type="checkbox" id="checkAll"/>전체선택/해제 &nbsp;&nbsp;
+              <input type="checkbox" id="reverseAll" onclick="reverseCheck()"/>선택반전 &nbsp;&nbsp;
+            </div>
+            <div class="col text-end">
+              <input type="button" value="선택항목삭제" onclick="selectDelCheck()" class="btn btn-danger btn-sm mr-3"/>
+              <input type="button" value="돌아가기" th:onclick="|location.href='@{/pds/pdsList}'|" class="btn btn-warning btn-sm"/>
+            </div>
+          </div>
+          <th:block th:each="file, st : ${files}">
+            <tr>
+              <td>
+                <input type="checkbox" name="chk" class="chk" th:value="${file}"/>
+              </td>
+              <td><a href="#" th:onclick="imgCheck([[${file}]])" data-bs-toggle="modal" data-bs-target="#myModal">[[${st.count}]]</a></td>
+              <td>
+                <a th:href="@{/work/uploadTest/}+${file}" th:download="${file}" title="다운로드"
+                   class="text-dark link-primary link-underline-opacity-0 link-underline-opacity-100-hover">[[${file}]]</a>
+              </td>
+              <td th:with="ext=${#strings.substring(file,#strings.length(file)-3)}">
+                <th:block th:if="${ext=='jpg' or ext=='gif' or ext=='png'}">
+                  <a th:href="@{/work/uploadTest/}+${file}" target="_blank">
+                    <img th:src="@{/work/uploadTest/}+${file}" width="100px"/>
+                  </a>
+                </th:block>
+                <th:block th:unless="${ext=='jpg' or ext=='gif' or ext=='png'}">
+                  [[${file}]]
+                </th:block>
+              </td>
+            </tr>
+          </th:block>
+        </th:block>
+      </table>
+    </form>
+
+    <!-- The Modal -->
+    <div class="modal fade" id="myModal">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Modal Heading</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <!-- Modal body -->
+          <div class="modal-body">
+            <img id="imgSrc" width="460px"/>
+            <div id="fileName"></div><br/>
+          </div>
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</html>
